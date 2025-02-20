@@ -68,6 +68,28 @@ export class RegiaoService {
       .subscribe();
   }
 
+  UpdateRegiao(regiao: Regiao){
+    this.loadingSubject.next(true);
+    this.http.put<true>(this.apiUrl, regiao)
+      .pipe(
+        tap(
+          () => this.sucessoSubject.next(true),
+          () => this.carregarRegioes()),
+        catchError(error => {
+          () => this.sucessoSubject.next(false);
+          
+          this.snackBar.open(error.error, 'Fechar', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+          
+          return throwError(() => error);
+        }),
+        finalize(() => this.loadingSubject.next(false))
+      )
+      .subscribe();
+  }
+
   activateRegiao(id: string){
     const url = `${this.apiUrl}activate?id=${id}`;
     this.http.put<true>(url, null)

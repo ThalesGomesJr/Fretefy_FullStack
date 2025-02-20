@@ -27,4 +27,18 @@ export class EditarComponent implements OnInit {
     });
   }
 
+  salvarRegiao(regiao: any) {
+    this.regiao = regiao;
+    this.regiaoService.UpdateRegiao(regiao);
+    this.isLoading$ = this.regiaoService.isLoading$;
+    
+    this.regiaoService.sucesso$.subscribe(sucesso => {
+      if (sucesso) {
+        this.router.navigate(['/regiao']);
+      }
+    });
+
+    console.log(this.regiao)
+  }
+
 }

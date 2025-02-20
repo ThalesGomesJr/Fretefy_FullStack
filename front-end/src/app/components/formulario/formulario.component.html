@@ -20,7 +20,7 @@
         <div *ngFor="let cidadeCtrl of cidades.controls; let i = index" [formGroupName]="i" class="cidade-container">
           <mat-form-field class="full-width cidade-select">
             <mat-label>Cidade</mat-label>
-            <mat-select formControlName="cidade" [disabled]="true">
+            <mat-select formControlName="cidade" [compareWith]="compararCidades" [disabled]="true">
               <mat-option *ngFor="let cidade of todasCidades" [value]="cidade">
                 {{ cidade.nome }}
               </mat-option>

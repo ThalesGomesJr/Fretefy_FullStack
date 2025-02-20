@@ -180,10 +180,16 @@ export class FormularioComponent implements OnInit {
   inicializarFormulario(): void {
     this.form = this.fb.group({
       nome: [this.regiao.nome, Validators.required],
-      regiaoCidades: this.fb.array(this.regiao.regiaoCidades.map(rc => this.criarGrupoCidade(rc))),
+      regiaoCidades: this.fb.array([]),
       ativo: [this.regiao.ativo],
-      novaCidade: [null, Validators.required]
+      novaCidade: [null]
     });
+
+    if (this.regiao?.regiaoCidades) {
+      this.regiao.regiaoCidades.forEach(rc => {
+        this.cidades.push(this.criarGrupoCidade(rc));
+      });
+    }
   }
 
   get cidades(): FormArray {
@@ -200,7 +206,7 @@ export class FormularioComponent implements OnInit {
   adicionarCidade(): void {
     const novaCidade = this.form.get('novaCidade')?.value;
     if (novaCidade && !this.cidadesAdicionadas.some(rc => rc.cidade.id === novaCidade.id)) {
-      let novaRegiaoCidade: RegiaoCidade = { id: "", cidade: novaCidade };
+      let novaRegiaoCidade: RegiaoCidade = { id: null, cidade: novaCidade };
       this.cidades.push(this.criarGrupoCidade(novaRegiaoCidade));      
       this.cidadesAdicionadas.push(novaRegiaoCidade);
       
@@ -225,6 +231,9 @@ export class FormularioComponent implements OnInit {
     this.form.get('ativo')?.setValue(event.checked);
   }
 
+  compararCidades(c1: Cidade, c2: Cidade): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
 
   salvarRegiao(): void {
     if (this.form.valid) {
