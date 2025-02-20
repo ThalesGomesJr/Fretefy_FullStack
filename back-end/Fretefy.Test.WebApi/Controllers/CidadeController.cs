@@ -1,8 +1,10 @@
 ﻿using Fretefy.Test.Domain.Entities;
 using Fretefy.Test.Domain.Interfaces;
+using Fretefy.Test.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Fretefy.Test.WebApi.Controllers
 {
@@ -18,24 +20,24 @@ namespace Fretefy.Test.WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult List([FromQuery] string uf, [FromQuery] string terms)
+        public async Task<IActionResult> List([FromQuery] string uf, [FromQuery] string terms)
         {
-            IEnumerable<Cidade> cidades;
+            IEnumerable<CidadeModel> cidades;
 
             if (!string.IsNullOrEmpty(terms))
-                cidades = _cidadeService.Query(terms);
+                cidades = await _cidadeService.Query(terms);
             else if (!string.IsNullOrEmpty(uf))
-                cidades = _cidadeService.ListByUf(uf);
+                cidades = await _cidadeService.ListByUf(uf);
             else
-                cidades = _cidadeService.List();
+                cidades = await _cidadeService.List();
 
             return Ok(cidades);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var cidades = _cidadeService.Get(id);
+            var cidades = await _cidadeService.Get(id);
             return Ok(cidades);
         }
     }

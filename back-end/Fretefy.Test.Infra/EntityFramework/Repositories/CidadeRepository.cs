@@ -1,8 +1,10 @@
 ﻿using Fretefy.Test.Domain.Entities;
 using Fretefy.Test.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Fretefy.Test.Infra.EntityFramework.Repositories
 {
@@ -14,21 +16,26 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
         {
             _dbSet = dbContext.Set<Cidade>();
         }
-
-        public IQueryable<Cidade> List()
+        public async Task<Cidade> Get(Guid id)
         {
-            return _dbSet.AsQueryable();
+            return await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public IEnumerable<Cidade> ListByUf(string uf)
+
+        public async Task<IEnumerable<Cidade>> List()
         {
-            return _dbSet.Where(w => EF.Functions.Like(w.UF, $"%{uf}%"));
+            return await _dbSet.ToListAsync();
         }
 
-        public IEnumerable<Cidade> Query(string terms)
+        public async Task<IEnumerable<Cidade>> ListByUf(string uf)
+        {
+            return await _dbSet.Where(w => EF.Functions.Like(w.UF, $"%{uf}%")).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Cidade>> Query(string terms)
         {
 
-            return _dbSet.Where(w => EF.Functions.Like(w.Nome, $"%{terms}%") || EF.Functions.Like(w.UF, $"%{terms}%"));
+            return await _dbSet.Where(w => EF.Functions.Like(w.Nome, $"%{terms}%") || EF.Functions.Like(w.UF, $"%{terms}%")).ToArrayAsync();
         }
     }
 }

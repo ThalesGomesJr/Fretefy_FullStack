@@ -1,0 +1,65 @@
+<div *ngIf="isLoading$ | async" class="loading-container">
+    <mat-spinner color="primary"></mat-spinner>
+</div>
+
+<mat-card class="form-container" *ngIf="!(isLoading$ | async)">
+    <div class="form-header">
+      <h2>Cadastro de região</h2>
+    </div>    
+  
+    <form [formGroup]="form">
+      <mat-form-field class="full-width">
+        <mat-label>Nome da região *</mat-label>
+        <input matInput formControlName="nome" />
+      </mat-form-field>
+  
+      <h3>Locais da região</h3>
+      <div formArrayName="regiaoCidades">
+        <div *ngFor="let cidadeCtrl of cidades.controls; let i = index" [formGroupName]="i" class="cidade-container">
+          <mat-form-field class="full-width cidade-select">
+            <mat-label>Cidade</mat-label>
+            <mat-select formControlName="cidade" [disabled]="true">
+              <mat-option *ngFor="let cidade of todasCidades" [value]="cidade">
+                {{ cidade.nome }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="removerCidade(i)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      
+      <!-- <mat-form-field class="full-width">
+        <mat-label>Cidade</mat-label>
+        <mat-select formControlName="novaCidade">
+           
+          <mat-option *ngFor="let cidade of cidadesDisponiveis" [value]="cidade">
+            {{ cidade.nome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> -->
+
+        <!-- <ng-select
+            [items]="cidadesDisponiveis"
+            bindLabel="nome"
+            bindValue="id"
+            [searchable]="true"
+            placeholder="Selecione uma cidade"
+            formControlName="cidade">
+        </ng-select> -->
+  
+      <div class="add-local-container">
+        <button mat-button class="add-local" (click)="adicionarCidade()" 
+            [disabled]="!form.get('novaCidade')?.value">
+            <mat-icon>add_circle</mat-icon> Adicionar local
+        </button>
+      </div>
+
+      <div class="actions">
+        <button mat-button color="warn" (click)="cancelar()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="salvarRegiao()">Salvar</button>
+      </div>
+    </form>
+  </mat-card>
+  

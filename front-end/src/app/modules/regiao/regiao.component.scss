@@ -1,0 +1,44 @@
+.full-width {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+
+}
+  
+.no-background {
+  background: none;
+  box-shadow: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+}
+  
+.add-button {
+  border-radius: 20px;
+  padding: 6px 16px;
+}
+
+.actions-header,
+  .actions-cell {
+  text-align: right;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 100vh; 
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 999; 
+}
+      
