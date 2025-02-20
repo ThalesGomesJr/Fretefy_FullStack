@@ -16,6 +16,9 @@ export class RegiaoService {
   private regioesSubject = new BehaviorSubject<Regiao[]>([]);
   regioes$: Observable<Regiao[]> = this.regioesSubject.asObservable();
 
+  private regioaoEdicaoSubject = new BehaviorSubject<Regiao>(null);
+  regioaoEdicao$: Observable<Regiao> = this.regioaoEdicaoSubject.asObservable();
+
   private loadingSubject = new BehaviorSubject<boolean>(true);
   isLoading$ = this.loadingSubject.asObservable();
 
@@ -25,17 +28,27 @@ export class RegiaoService {
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   carregarRegioes() {
+    this.loadingSubject.next(true);
     this.http.get<Regiao[]>(this.apiUrl + "list" )
       .pipe(
         tap(regioes => this.regioesSubject.next(regioes)),
         finalize(() => this.loadingSubject.next(false))
       ).subscribe();
   }
+
+  carregarRegiao(id: string) {
+    this.loadingSubject.next(true);
+    const url = `${this.apiUrl}${id}`;
+    this.http.get<Regiao>(url)
+      .pipe(
+        tap(regiao => this.regioaoEdicaoSubject.next(regiao)),
+        finalize(() => this.loadingSubject.next(false))
+      ).subscribe();
+  }
   
   CreateRegiao(regiao: Regiao){
-    const url = `${this.apiUrl}`;
-    this.loadingSubject.next(true)
-    this.http.post<true>(url, regiao)
+    this.loadingSubject.next(true);
+    this.http.post<true>(this.apiUrl, regiao)
       .pipe(
         tap(
           () => this.sucessoSubject.next(true),
