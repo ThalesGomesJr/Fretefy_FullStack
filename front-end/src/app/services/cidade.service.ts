@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { Cidade } from '../Models/Cidades';
+import { Cidade } from '../Models/Cidade';
 
 @Injectable({
   providedIn: 'root'

@@ -20,7 +20,8 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
 
         public async Task<bool> CidadeJaCadastrada(IEnumerable<RegiaoCidade> regiaoCidades) 
         {
-            return await _dbSet.AnyAsync(x => regiaoCidades.Any(rc => rc.CidadeId == x.CidadeId));
+            var cidadeIds = regiaoCidades.Select(rc => rc.CidadeId).ToList();
+            return await _dbSet.Where(r => cidadeIds.Contains(r.CidadeId)).AnyAsync();          
         }        
     }
 }

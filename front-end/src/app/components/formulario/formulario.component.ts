@@ -2,10 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Cidade } from 'src/app/Models/Cidades';
+import { Cidade } from 'src/app/Models/Cidade';
 import { Regiao } from 'src/app/models/Regiao';
 import { RegiaoCidade } from 'src/app/models/RegiaoCidade';
 import { CidadeService } from 'src/app/services/cidade.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-formulario',
@@ -13,7 +15,7 @@ import { CidadeService } from 'src/app/services/cidade.service';
   styleUrls: ['./formulario.component.scss']
 })
 export class FormularioComponent implements OnInit {
-  @Input() regiao: Regiao = { id: '', nome: '', regiaoCidades: [], ativo: true };
+  @Input() regiao: Regiao;
   @Output() salvar = new EventEmitter<Regiao>();
 
   form!: FormGroup;
@@ -161,8 +163,8 @@ export class FormularioComponent implements OnInit {
   isLoading$!: Observable<boolean>;
   cidadesDisponiveis: Cidade[] = [];
   cidadesAdicionadas: RegiaoCidade[] = [];
-
-  constructor(private fb: FormBuilder, private router: Router, private cidadesService: CidadeService ) { }
+  statusDescricao: string = "";
+  constructor(private fb: FormBuilder, private router: Router, private cidadesService: CidadeService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.cidadesService.carregarCidades() 
@@ -179,6 +181,7 @@ export class FormularioComponent implements OnInit {
     this.form = this.fb.group({
       nome: [this.regiao.nome, Validators.required],
       regiaoCidades: this.fb.array(this.regiao.regiaoCidades.map(rc => this.criarGrupoCidade(rc))),
+      ativo: [this.regiao.ativo],
       novaCidade: [null, Validators.required]
     });
   }
@@ -218,15 +221,28 @@ export class FormularioComponent implements OnInit {
     );
   }
 
+  toggleAtivo(event: MatCheckboxChange) {
+    this.form.get('ativo')?.setValue(event.checked);
+  }
+
+
   salvarRegiao(): void {
     if (this.form.valid) {
       const regiaoAtualizada: Regiao = {
         id: this.regiao.id || '',
         nome: this.form.value.nome,
         regiaoCidades: this.form.value.regiaoCidades.map((item: any) => item.regiaoCidade),
-        ativo: this.regiao.ativo
+        ativo: this.form.value.ativo
       };
-      this.salvar.emit(regiaoAtualizada);
+      
+      if(regiaoAtualizada.regiaoCidades.length === 0){
+        this.snackBar.open('Adicione pelo menos uma cidade.', 'Fechar', {
+          duration: 3000,
+          panelClass: ['alert-snackbar']
+        });
+      }
+      else
+        this.salvar.emit(regiaoAtualizada);
     }
   }
 

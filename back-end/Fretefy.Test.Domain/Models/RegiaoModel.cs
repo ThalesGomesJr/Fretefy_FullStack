@@ -20,6 +20,7 @@ namespace Fretefy.Test.Domain.Models
         public bool Ativo { get; set; }
 
         [Required(ErrorMessage = "A lista de cidades não pode estar vazia.")]
+        [MinLength(1, ErrorMessage = "A lista deve ter pelo menos 1 cidade adicionada.")]
         public ICollection<CreateRegiaoCidadeModel> RegiaoCidades { get; set;} = new List<CreateRegiaoCidadeModel>();
     }
 

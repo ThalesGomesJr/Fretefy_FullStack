@@ -1,1 +1,5 @@
-<app-formulario (salvar)="salvarRegiao($event)"></app-formulario>
+<div *ngIf="isLoading$ | async" class="loading-container">
+    <mat-spinner color="primary"></mat-spinner>
+  </div>
+
+<app-formulario *ngIf="!(isLoading$ | async)" [regiao]="regiao" (salvar)="salvarRegiao($event)"></app-formulario>

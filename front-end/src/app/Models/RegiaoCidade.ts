@@ -1,4 +1,4 @@
-import { Cidade } from "./Cidades";
+import { Cidade } from "./Cidade";
 
 export interface RegiaoCidade {
     id: string;

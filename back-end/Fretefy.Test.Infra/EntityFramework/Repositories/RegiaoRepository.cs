@@ -47,6 +47,11 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
                 .ToListAsync();
         }
 
+        public async Task<bool> RegiaoJaCadastrada(string nome) 
+        {
+            return await _dbSet.Where(x => x.Nome.ToLower() == nome.ToLower()).AnyAsync();
+        }
+
         public async Task Create(Regiao regiao)
         {
             await _dbSet.AddAsync(regiao);

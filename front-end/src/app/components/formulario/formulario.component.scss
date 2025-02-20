@@ -50,16 +50,3 @@
 button {
     flex-shrink: 0;
 }
-
-.loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    height: 100vh; 
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.8);
-    z-index: 999; 
-}

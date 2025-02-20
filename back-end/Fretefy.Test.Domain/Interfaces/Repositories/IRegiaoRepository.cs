@@ -11,6 +11,7 @@ namespace Fretefy.Test.Domain.Interfaces.Repositories
     {
         Task<Regiao> Get(Expression<Func<Regiao, bool>> expressao);
         Task<IEnumerable<Regiao>> List(string nome);
+        Task<bool> RegiaoJaCadastrada(string nome);
         Task Create(Regiao regiao);
         Task Update(Regiao regiao);
     }
