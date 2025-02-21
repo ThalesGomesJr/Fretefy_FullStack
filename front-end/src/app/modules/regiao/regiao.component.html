@@ -1,7 +1,8 @@
 <mat-card class="full-width no-background">
   <div class="header">
     <mat-card-title>Regiões</mat-card-title>
-    <button mat-raised-button color="default" class="add-button" [routerLink]="['/regiao/cadastrar']">+ Cadastrar</button>
+    <button mat-raised-button color="primary" class="button" (click)="gerarArquivoXlsx()">+ Exportar Listagem</button>
+    <button mat-raised-button color="default" class="button add-button" [routerLink]="['/regiao/cadastrar']">+ Cadastrar</button>
   </div>  
 
   <div *ngIf="isLoading$ | async" class="loading-container">

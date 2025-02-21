@@ -44,7 +44,9 @@ namespace Fretefy.Test.Domain.Services
             {
                 var regiaoCidades = regiaoModel.RegiaoCidades.Select(x => new RegiaoCidade(x.Cidade.Id)).ToList();  
 
-                if (await _regiaoRepository.RegiaoJaCadastrada(regiaoModel.Nome)){
+                var regiaoEntidade = new Regiao(regiaoModel.Nome, regiaoModel.Ativo, regiaoCidades);
+
+                if (await _regiaoRepository.RegiaoJaCadastrada(regiaoModel.Nome, regiaoEntidade.Id)){
                     return (false, "Já existe uma região com este nome.");
                 }
                 
@@ -54,7 +56,6 @@ namespace Fretefy.Test.Domain.Services
                 if (await _regiaoCidadeRepository.CidadeJaCadastrada(regiaoCidades))
                     return (false, "A mesma cidade não pode ser cadastrada duas vezes em regiões diferentes.");
 
-                var regiaoEntidade = new Regiao(regiaoModel.Nome, regiaoModel.Ativo, regiaoCidades);
                 await _regiaoRepository.Create(regiaoEntidade);
                 return (true, "Região cadastrada com sucesso.");
             } 
@@ -95,6 +96,12 @@ namespace Fretefy.Test.Domain.Services
                 if(regiaoEntidade.RegiaoCidades.GroupBy(rc => rc.CidadeId).Any(g => g.Count() > 1))
                     return (false, "A mesma cidade não pode ser cadastrada duas vezes na mesma região.");
 
+                if (await _regiaoRepository.RegiaoJaCadastrada(regiaoModel.Nome, regiaoEntidade.Id)){
+                    return (false, "Já existe uma região com este nome.");
+                }
+
+                regiaoEntidade.Nome = regiaoModel.Nome;
+                regiaoEntidade.Ativo = regiaoModel.Ativo;
                 
                 await _regiaoRepository.Update(regiaoEntidade);
                 return (true, "Região atualizada com sucesso.");

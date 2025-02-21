@@ -32,6 +32,11 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
             return await _dbSet.Where(w => EF.Functions.Like(w.UF, $"%{uf}%")).ToListAsync();
         }
 
+        public async Task<IEnumerable<Cidade>> ListAvailable(IEnumerable<Guid> cidadesIds)
+        {
+            return await _dbSet.Where(c => !cidadesIds.Contains(c.Id)).ToListAsync();
+        }
+
         public async Task<IEnumerable<Cidade>> Query(string terms)
         {
 

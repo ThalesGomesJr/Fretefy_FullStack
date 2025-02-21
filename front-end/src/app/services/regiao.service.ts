@@ -5,6 +5,7 @@ import { tap, finalize, catchError } from 'rxjs/operators';
 import { Regiao } from '../models/Regiao';
 import { environment } from '../../environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Arquivo } from '../Models/Arquivo';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,9 @@ export class RegiaoService {
 
   private regioaoEdicaoSubject = new BehaviorSubject<Regiao>(null);
   regioaoEdicao$: Observable<Regiao> = this.regioaoEdicaoSubject.asObservable();
+
+  private arquivoSubject = new BehaviorSubject<Arquivo>(null);
+  arquivo$: Observable<Arquivo> = this.arquivoSubject.asObservable();
 
   private loadingSubject = new BehaviorSubject<boolean>(true);
   isLoading$ = this.loadingSubject.asObservable();
@@ -48,6 +52,7 @@ export class RegiaoService {
   
   CreateRegiao(regiao: Regiao){
     this.loadingSubject.next(true);
+    this.sucessoSubject.next(false);
     this.http.post<true>(this.apiUrl, regiao)
       .pipe(
         tap(
@@ -70,6 +75,7 @@ export class RegiaoService {
 
   UpdateRegiao(regiao: Regiao){
     this.loadingSubject.next(true);
+    this.sucessoSubject.next(false);
     this.http.put<true>(this.apiUrl, regiao)
       .pipe(
         tap(
@@ -102,6 +108,15 @@ export class RegiaoService {
     this.http.put<true>(url, null)
       .pipe(tap(() => this.carregarRegioes()))
       .subscribe();
+  }
+
+  carregarArquivo() {
+    this.loadingSubject.next(true);
+    this.http.get<Arquivo>(this.apiUrl + "export-list" )
+      .pipe(
+        tap(arq => this.arquivoSubject.next(arq)),
+        finalize(() => this.loadingSubject.next(false))
+      ).subscribe();
   }
 
 }

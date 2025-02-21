@@ -37,8 +37,6 @@ export class EditarComponent implements OnInit {
         this.router.navigate(['/regiao']);
       }
     });
-
-    console.log(this.regiao)
   }
 
 }

@@ -20,7 +20,7 @@ namespace Fretefy.Test.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> List([FromQuery] string uf, [FromQuery] string terms)
+        public async Task<IActionResult> List([FromQuery] string uf, [FromQuery] string terms, [FromQuery] bool available)
         {
             IEnumerable<CidadeModel> cidades;
 
@@ -28,6 +28,8 @@ namespace Fretefy.Test.WebApi.Controllers
                 cidades = await _cidadeService.Query(terms);
             else if (!string.IsNullOrEmpty(uf))
                 cidades = await _cidadeService.ListByUf(uf);
+            else if(available)
+                cidades = await _cidadeService.ListAvailable();
             else
                 cidades = await _cidadeService.List();
 

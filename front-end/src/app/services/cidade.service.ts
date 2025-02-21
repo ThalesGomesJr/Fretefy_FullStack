@@ -19,11 +19,14 @@ export class CidadeService {
 
   constructor(private http: HttpClient) { }
 
-  carregarCidades() {
-      this.http.get<Cidade[]>(this.apiUrl)
-        .pipe(
-          tap(cidades => this.cidadesSubject.next(cidades)),
-          finalize(() => this.loadingSubject.next(false))
-        ).subscribe();
+  carregarCidadesDisponiveis() {
+    this.loadingSubject.next(true);
+    this.cidadesSubject.next([]);
+    const url = `${this.apiUrl}?available=true`;
+    this.http.get<Cidade[]>(url)
+      .pipe(
+        tap(cidades => this.cidadesSubject.next(cidades)),
+        finalize(() => this.loadingSubject.next(false))
+      ).subscribe();
     }
 }

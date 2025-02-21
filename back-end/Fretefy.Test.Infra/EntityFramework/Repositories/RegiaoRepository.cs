@@ -37,6 +37,7 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
                     .Include(x => x.RegiaoCidades)
                         .ThenInclude(x => x.Cidade)
                     .Where(x => EF.Functions.Like(x.Nome, $"%{nome}%"))
+                    .OrderBy(x => x.Nome)
                     .ToListAsync();
             }
 
@@ -44,12 +45,13 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
                 .AsSplitQuery()
                 .Include(x => x.RegiaoCidades)
                     .ThenInclude(x => x.Cidade)
+                .OrderBy(x => x.Nome)
                 .ToListAsync();
         }
 
-        public async Task<bool> RegiaoJaCadastrada(string nome) 
+        public async Task<bool> RegiaoJaCadastrada(string nome, Guid id) 
         {
-            return await _dbSet.Where(x => x.Nome.ToLower() == nome.ToLower()).AnyAsync();
+            return await _dbSet.Where(x => x.Id != id).Where(x => x.Nome.ToLower() == nome.ToLower()).AnyAsync();
         }
 
         public async Task Create(Regiao regiao)

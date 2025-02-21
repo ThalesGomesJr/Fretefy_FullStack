@@ -10,6 +10,7 @@ namespace Fretefy.Test.Domain.Interfaces.Repositories
 {
     public interface IRegiaoCidadeRepository
     {
+        Task<IEnumerable<RegiaoCidade>> List();
         Task<bool> CidadeJaCadastrada(IEnumerable<RegiaoCidade> regiaoCidades);
     }
 }

@@ -12,5 +12,6 @@ namespace Fretefy.Test.Domain.Interfaces
         Task<IEnumerable<CidadeModel>> List();
         Task<IEnumerable<CidadeModel>> ListByUf(string uf);
         Task<IEnumerable<CidadeModel>> Query(string terms);
+        Task<IEnumerable<CidadeModel>> ListAvailable();
     }
 }
